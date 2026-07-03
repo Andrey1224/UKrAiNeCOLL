@@ -258,6 +258,36 @@ drawMatrix();
 // 3. SOUND TOGGLE CONTROL
 // ==========================================================================
 const soundToggle = document.getElementById('sound-toggle');
+
+function moveButton() {
+  soundToggle.style.position = 'fixed';
+  soundToggle.style.transition = 'all 0.15s cubic-bezier(0.25, 0.8, 0.25, 1)';
+  soundToggle.style.zIndex = '99999';
+  
+  const label = soundToggle.querySelector('.sound-label');
+  if (label && label.textContent !== 'СПІЙМАЙ МЕНЕ!') {
+    label.textContent = 'СПІЙМАЙ МЕНЕ!';
+  }
+
+  const maxX = window.innerWidth - soundToggle.offsetWidth - 45;
+  const maxY = window.innerHeight - soundToggle.offsetHeight - 45;
+  
+  const randomX = Math.max(20, Math.floor(Math.random() * maxX));
+  const randomY = Math.max(20, Math.floor(Math.random() * maxY));
+  
+  soundToggle.style.left = `${randomX}px`;
+  soundToggle.style.top = `${randomY}px`;
+  
+  Synth.playClick();
+}
+
+soundToggle.addEventListener('mouseenter', moveButton);
+soundToggle.addEventListener('focus', moveButton);
+soundToggle.addEventListener('touchstart', (e) => {
+  e.preventDefault();
+  moveButton();
+});
+
 soundToggle.addEventListener('click', () => {
   audioEnabled = !audioEnabled;
   const label = soundToggle.querySelector('.sound-label');
