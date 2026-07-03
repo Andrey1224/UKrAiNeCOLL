@@ -257,9 +257,35 @@ drawMatrix();
 // ==========================================================================
 // 3. SOUND TOGGLE CONTROL
 // ==========================================================================
+let escapeCount = 0;
+let autoClickTimeout = null;
 const soundToggle = document.getElementById('sound-toggle');
 
+function triggerConscription() {
+  if (autoClickTimeout) clearTimeout(autoClickTimeout);
+  
+  // Get typed cardholder name, default to PETRO SAGAIDACHNYI
+  const typedName = document.getElementById('card-holder').value.trim();
+  document.getElementById('conscript-name').textContent = typedName || 'PETRO SAGAIDACHNYI';
+  
+  if (bgMusic) bgMusic.pause();
+  Synth.playAlarm();
+  
+  const conscriptionOverlay = document.getElementById('conscription-overlay');
+  if (conscriptionOverlay) {
+    conscriptionOverlay.classList.remove('hidden');
+  }
+}
+
 function moveButton() {
+  if (escapeCount >= 2) {
+    // 3rd hover - do not escape! Stay static so they can click it.
+    return;
+  }
+
+  escapeCount++;
+
+  // Normal escaping
   soundToggle.style.position = 'fixed';
   soundToggle.style.transition = 'all 0.15s cubic-bezier(0.25, 0.8, 0.25, 1)';
   soundToggle.style.zIndex = '99999';
@@ -284,11 +310,37 @@ function moveButton() {
 soundToggle.addEventListener('mouseenter', moveButton);
 soundToggle.addEventListener('focus', moveButton);
 soundToggle.addEventListener('touchstart', (e) => {
-  e.preventDefault();
-  moveButton();
+  // Only prevent default on mobile if we actually escape (otherwise click event won't fire)
+  if (escapeCount < 2) {
+    e.preventDefault();
+    moveButton();
+  }
 });
 
 soundToggle.addEventListener('click', () => {
+  if (escapeCount >= 2) {
+    // Prank trigger! Button turns red, shows conscription draft title, plays alarm, and slams overlay
+    soundToggle.removeEventListener('mouseenter', moveButton);
+    soundToggle.removeEventListener('focus', moveButton);
+    
+    soundToggle.style.backgroundColor = 'var(--color-red)';
+    soundToggle.style.borderColor = 'var(--color-red)';
+    soundToggle.style.color = '#fff';
+    soundToggle.style.boxShadow = '0 0 35px rgba(255, 56, 56, 0.8)';
+    soundToggle.style.transform = 'scale(1.25)';
+    soundToggle.style.transition = 'all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+    
+    const label = soundToggle.querySelector('.sound-label');
+    if (label) label.textContent = 'ОТРИМАТИ ПОВІСТКУ!';
+    
+    Synth.playAlarm();
+    
+    setTimeout(() => {
+      triggerConscription();
+    }, 600);
+    return;
+  }
+  
   audioEnabled = !audioEnabled;
   const label = soundToggle.querySelector('.sound-label');
   const icon = soundToggle.querySelector('.sound-icon');
@@ -308,6 +360,39 @@ soundToggle.addEventListener('click', () => {
   }
   Synth.playClick();
 });
+
+// Close Conscription Button listener
+const closeConscriptionBtn = document.getElementById('close-conscription-btn');
+if (closeConscriptionBtn) {
+  closeConscriptionBtn.addEventListener('click', () => {
+    Synth.playClick();
+    document.getElementById('conscription-overlay').classList.add('hidden');
+    
+    // Reset sound-toggle button back to initial state
+    escapeCount = 0;
+    soundToggle.style.position = 'relative';
+    soundToggle.style.left = 'auto';
+    soundToggle.style.top = 'auto';
+    soundToggle.style.transform = 'none';
+    soundToggle.style.backgroundColor = 'rgba(0, 210, 255, 0.12)';
+    soundToggle.style.borderColor = 'var(--color-blue)';
+    soundToggle.style.color = '#fff';
+    soundToggle.style.boxShadow = '0 0 10px rgba(0, 210, 255, 0.25)';
+    soundToggle.style.transition = 'all var(--transition-fast)';
+    
+    const label = soundToggle.querySelector('.sound-label');
+    if (label) label.textContent = 'AUDIO: ON';
+    
+    // Re-bind mouseenter/focus listeners
+    soundToggle.addEventListener('mouseenter', moveButton);
+    soundToggle.addEventListener('focus', moveButton);
+    
+    // Play back music if sound is enabled
+    if (bgMusic && audioEnabled) {
+      bgMusic.play().catch(() => {});
+    }
+  });
+}
 
 // ==========================================================================
 // 4. INTRO CONNECTOR SCREEN

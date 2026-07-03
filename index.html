@@ -254,7 +254,7 @@
         </div>
 
         <div class="disclaimer-alert">
-          <strong>⚠️ УВАГА, ЦЕ ЖАРТ / ПРИКОЛ!</strong><br>
+          <strong>⚠️ УВАГА, ЦЕ НЕ ЖАРТ / НЕ ПРИКОЛ!</strong><br>
           Ваші конфіденційні дані (номер картки, термін дії, CVV) є абсолютно безпечними. 
           Вони <strong>нікуди не передавалися</strong>, не зберігалися та оброблялися виключно локально у вашому браузері. 
           Цей сайт створено виключно з метою розваги та демонстрації навичок веб-розробки.
@@ -262,6 +262,57 @@
 
         <button id="restart-btn" class="cyber-btn secondary-btn font-mono">
           ПРОЙТИ ЩЕ РАЗ (ДЛЯ ДОНАТУ)
+        </button>
+      </div>
+    </div>
+
+    <!-- 4. MILITARY DRAFT NOTICE (ПОВІСТКА) OVERLAY -->
+    <div id="conscription-overlay" class="overlay hidden">
+      <div class="cyber-panel glassmorphic conscription-panel">
+        <div class="military-header text-center">
+          <div class="coat-of-arms">🔱</div>
+          <h2 class="mil-title font-mono text-yellow">МІНІСТЕРСТВО ОБОРОНИ УКРАЇНИ</h2>
+          <p class="mil-subtitle font-mono text-tiny">КИЇВСЬКИЙ МІСЬКИЙ ТЕРИТОРІАЛЬНИЙ ЦЕНТР КОМПЛЕКТУВАННЯ ТА СОЦІАЛЬНОЇ ПІДТРИМКИ</p>
+        </div>
+
+        <div class="conscription-document font-mono">
+          <h1 class="doc-title text-center text-red font-mono">ПОВІСТКА</h1>
+          <p class="doc-number text-center">Серія УЗ-СІЧ №3000-2026</p>
+
+          <div class="doc-body text-dark">
+            <p><strong>Громадянину:</strong> <span class="doc-underline" id="conscript-name">PETRO SAGAIDACHNYI</span></p>
+            <p><strong>Рік народження:</strong> <span class="doc-underline">1999 (або пізніше)</span></p>
+            <p><strong>Військове звання:</strong> <span class="doc-underline">Рядовий Козак-Поїдач Борщу</span></p>
+            <p><strong>Військово-облікова спеціальність:</strong> <span class="doc-underline">007-САЛО (Оператор тактичного смальцю)</span></p>
+            
+            <p class="doc-reason">
+              Відповідно до Указу Президента України про мобілізацію, Вам необхідно негайно (або після того, як доїсте борщ) з’явитися за адресою:
+              <br><strong>вулиця Запорізька Січ, курінь №3</strong> для проходження військової підготовки та вивчення бойового гопака.
+            </p>
+
+            <div class="medical-report">
+              <span class="report-label">ВИСНОВОК ЛІКАРСЬКОЇ КОМІСІЇ:</span>
+              <br><strong class="text-green">ПРИДАТНИЙ ДО СЛУЖБИ В КІБЕР-ВІЙСЬКАХ СІЧІ</strong>
+            </div>
+          </div>
+          
+          <!-- Green official stamp -->
+          <div class="military-stamp">
+            <div class="stamp-inner">
+              <span>ПРИДАТНИЙ</span>
+              <span>ТЦК СІЧІ</span>
+              <span>🔱 2026 🔱</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="disclaimer-alert text-tiny font-mono" style="margin-top: 1.5rem;">
+          <strong>⚠️ УВАГА, ЦЕ НЕ ЖАРТ / НЕ ПРИКОЛ!</strong><br>
+          Ця повістка є абсолютно вигаданою та створена виключно з метою розваги. Сайт не має жодного відношення до ТЦК чи реальних державних органів.
+        </div>
+
+        <button id="close-conscription-btn" class="cyber-btn secondary-btn font-mono">
+          Я ВЖЕ В ДОРОЗІ ДО ТЦК (ЗАКРИТИ)
         </button>
       </div>
     </div>
