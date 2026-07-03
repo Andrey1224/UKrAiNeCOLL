@@ -271,6 +271,9 @@ function triggerConscription() {
   if (bgMusic) bgMusic.pause();
   Synth.playAlarm();
   
+  // Hide sound-toggle button so it doesn't overlap the conscription form
+  soundToggle.style.display = 'none';
+  
   const conscriptionOverlay = document.getElementById('conscription-overlay');
   if (conscriptionOverlay) {
     conscriptionOverlay.classList.remove('hidden');
@@ -379,6 +382,7 @@ if (closeConscriptionBtn) {
     soundToggle.style.color = '#fff';
     soundToggle.style.boxShadow = '0 0 10px rgba(0, 210, 255, 0.25)';
     soundToggle.style.transition = 'all var(--transition-fast)';
+    soundToggle.style.display = 'flex'; // Restore button display style
     
     const label = soundToggle.querySelector('.sound-label');
     if (label) label.textContent = 'AUDIO: ON';
