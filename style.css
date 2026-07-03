@@ -123,11 +123,11 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.75rem 1.5rem;
-  background: rgba(4, 8, 18, 0.85);
-  border-bottom: 1px solid rgba(0, 210, 255, 0.15);
+  padding: 0.85rem 1.5rem;
+  background: rgba(4, 8, 18, 0.9);
+  border-bottom: 2px solid rgba(0, 210, 255, 0.3);
   position: relative;
-  z-index: 10;
+  z-index: 999; /* Higher z-index to stay on top */
 }
 
 .status-item {
@@ -154,20 +154,27 @@ body {
 }
 
 .sound-btn {
-  background: transparent;
+  background: rgba(0, 210, 255, 0.12);
   border: 1px solid var(--color-blue);
-  color: var(--color-blue);
-  padding: 0.25rem 0.75rem;
-  font-size: 0.75rem;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  font-weight: bold;
   cursor: pointer;
   transition: all var(--transition-fast);
   border-radius: 4px;
+  text-shadow: 0 0 5px var(--color-blue);
+  box-shadow: 0 0 10px rgba(0, 210, 255, 0.25);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .sound-btn:hover {
-  background: var(--color-blue-glow);
-  color: #fff;
-  box-shadow: 0 0 10px var(--color-blue-glow);
+  background: var(--color-blue);
+  color: var(--bg-primary);
+  box-shadow: 0 0 15px var(--color-blue);
+  text-shadow: none;
 }
 
 /* ==========================================================================

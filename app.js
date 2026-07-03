@@ -15,6 +15,22 @@ let audioEnabled = true;
 let audioCtx = null;
 let hackSoundInterval = null;
 
+const bgMusic = document.getElementById('bg-music');
+if (bgMusic) {
+  bgMusic.volume = 0.45;
+  bgMusic.addEventListener('error', () => {
+    const code = bgMusic.error ? bgMusic.error.code : 'unknown';
+    setTimeout(() => {
+      if (typeof appendTerminalLog === 'function') {
+        appendTerminalLog(`> [ПОМИЛКА АУДІО] Код: ${code}. Перевірте формат або шлях до файлу.`, 'error');
+      } else {
+        console.error("Audio error code:", code);
+      }
+    }, 1500);
+  });
+  bgMusic.play().catch(() => {});
+}
+
 // Initialize Audio Context on user interaction (browser policy)
 function initAudio() {
   if (!audioCtx) {
@@ -252,11 +268,13 @@ soundToggle.addEventListener('click', () => {
     icon.textContent = '🔊';
     soundToggle.classList.remove('sound-disabled');
     initAudio();
+    if (bgMusic) bgMusic.play().catch(() => {});
   } else {
     label.textContent = 'AUDIO: OFF';
     icon.textContent = '🔇';
     soundToggle.classList.add('sound-disabled');
     Synth.stopHackingBeeps();
+    if (bgMusic) bgMusic.pause();
   }
   Synth.playClick();
 });
@@ -275,6 +293,19 @@ startBtn.addEventListener('click', () => {
   // Play enter/connect sounds
   Synth.playClick();
   setTimeout(() => Synth.playClick(), 120);
+
+  // Play background music
+  if (bgMusic && audioEnabled) {
+    bgMusic.play().then(() => {
+      if (typeof appendTerminalLog === 'function') {
+        appendTerminalLog(`> [АУДІО] Музику активовано успішно!`, 'success');
+      }
+    }).catch((err) => {
+      if (typeof appendTerminalLog === 'function') {
+        appendTerminalLog(`> [АУДІО] Помилка відтворення: ${err.message}`, 'error');
+      }
+    });
+  }
 
   // Transition UI
   introOverlay.classList.add('hidden');
