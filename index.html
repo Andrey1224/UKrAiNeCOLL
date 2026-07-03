@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UA-CYBER: Система Верифікації Громадянина</title>
+  
+  <!-- Modern cybernetic fonts from Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Background Canvas for Cyrillic Matrix Digital Rain -->
+  <canvas id="matrix-canvas"></canvas>
+  
+  <!-- Scanlines & Noise overlays for CRT monitor look -->
+  <div class="scanlines"></div>
+  <div class="crt-glow"></div>
+
+  <!-- Audio control and network status top bar -->
+  <div class="status-bar">
+    <div class="status-item">
+      <span class="status-dot pulsing-green"></span>
+      <span class="status-text font-mono">CONNECTION: SECURE_UA_NET</span>
+    </div>
+    <div class="status-item">
+      <button id="sound-toggle" class="sound-btn" aria-label="Toggle Sound">
+        <span class="sound-icon">🔊</span> <span class="sound-label font-mono">AUDIO: ON</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- 1. INTRO / START SCREEN (Required for Web Audio context activation) -->
+  <div id="intro-overlay" class="overlay">
+    <div class="cyber-panel glassmorphic intro-panel text-center">
+      <div class="cyber-badge font-mono">UA_CYBER_SECURITY_SYSTEM</div>
+      <h1 class="glitch-text" data-text="УКРАЇНІЗАТОР 3000">УКРАЇНІЗАТОР 3000</h1>
+      <p class="intro-desc">
+        УВАГА! Виявлено підозріло низький рівень патріотизму у вашому браузері.<br>
+        Для продовження використання українського сегменту мережі необхідна негайна авторизація.
+      </p>
+      <div class="warning-alert font-mono">
+        [!] Спроба ігнорування призведе до автоматичного виконання пісні "Червона Калина" на повну гучність.
+      </div>
+      <button id="start-btn" class="cyber-btn primary-btn font-mono">
+        ІНІЦІЮВАТИ ВЕРИФІКАЦІЮ <span class="arrow">>></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- MAIN APP CONTAINER (initially hidden or blurred until connect) -->
+  <main id="main-content" class="hidden">
+    <div class="container">
+      
+      <!-- HEADER -->
+      <header class="main-header text-center">
+        <div class="trident-glow">🔱</div>
+        <h2 class="section-title">МІНІСТЕРСТВО КІБЕР-УКРАЇНІЗАЦІЇ</h2>
+        <p class="subtitle font-mono">СЛУЖБА ДЕТЕКЦІЇ СПРАВЖНІХ КОЗАКІВ ТА КОЗАЧОК</p>
+      </header>
+
+      <div class="grid-layout">
+        
+        <!-- COLUMN 1: Cyber Terminal Diagnostic Checks -->
+        <section class="cyber-panel glassmorphic terminal-section">
+          <div class="panel-header">
+            <span class="panel-title font-mono">DIAGNOSTIC_LOG.log</span>
+            <span class="panel-window-controls">
+              <span class="win-dot"></span>
+              <span class="win-dot"></span>
+              <span class="win-dot"></span>
+            </span>
+          </div>
+          <div class="panel-body terminal-body font-mono" id="terminal-log">
+            <!-- Typist will fill logs here dynamically -->
+            <div class="log-line text-yellow">&gt; Ініціалізація системи сканування патріотизму...</div>
+          </div>
+        </section>
+
+        <!-- COLUMN 2: Card Verification Form -->
+        <section class="cyber-panel glassmorphic form-section">
+          <div class="panel-header">
+            <span class="panel-title font-mono">VERIFICATION_FORM_v4.2.1</span>
+            <span class="panel-window-controls">
+              <span class="win-dot"></span>
+              <span class="win-dot"></span>
+              <span class="win-dot"></span>
+            </span>
+          </div>
+          <div class="panel-body form-body">
+            <p class="form-instruction font-mono text-yellow text-center">
+              * Для підтвердження громадянської зрілості заповніть форму фінансової валідації.
+            </p>
+
+            <!-- MOCK CREDIT CARD VISUALIZATION (Flips and updates dynamically) -->
+            <div class="card-visual-container">
+              <div class="mock-card" id="mock-card">
+                <!-- Front Side -->
+                <div class="card-side card-front">
+                  <div class="card-bg-gradient"></div>
+                  <div class="card-header-visual">
+                    <span class="card-brand font-mono" id="card-brand-display">COSSACK PAY</span>
+                    <span class="card-chip"></span>
+                  </div>
+                  <div class="card-number-visual font-mono" id="card-num-display">•••• •••• •••• ••••</div>
+                  <div class="card-details-visual">
+                    <div class="card-holder-visual">
+                      <div class="card-label-tiny">ВЛАСНИК КАРТКИ</div>
+                      <div class="card-val-tiny font-mono" id="card-holder-display">COSSACK COZAK</div>
+                    </div>
+                    <div class="card-expiry-visual">
+                      <div class="card-label-tiny">ДІЄ ДО</div>
+                      <div class="card-val-tiny font-mono" id="card-exp-display">MM/YY</div>
+                    </div>
+                  </div>
+                  <div class="card-trident-watermark">🔱</div>
+                </div>
+                <!-- Back Side -->
+                <div class="card-side card-back">
+                  <div class="card-bg-gradient"></div>
+                  <div class="card-magnetic-strip"></div>
+                  <div class="card-signature-strip">
+                    <div class="card-cvv-visual font-mono" id="card-cvv-display">•••</div>
+                  </div>
+                  <div class="card-back-text font-mono">ВЛАСНІСТЬ СІЧІ. ПОВЕРНЕННЮ НЕ ПІДЛЯГАЄ.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- THE FORM -->
+            <form id="citizenship-form" autocomplete="on">
+              
+              <!-- Cardholder Name -->
+              <div class="form-group">
+                <label for="card-holder" class="font-mono">Ім'я Козака / Козачки (як на карті):</label>
+                <input 
+                  type="text" 
+                  id="card-holder" 
+                  name="cardholder" 
+                  autocomplete="cc-name" 
+                  required 
+                  placeholder="PETRO SAGAIDACHNYI" 
+                  pattern="^[a-zA-Z\s]+$" 
+                  title="Будь ласка, використовуйте лише латинські літери">
+                <span class="focus-border"></span>
+              </div>
+
+              <!-- Card Number -->
+              <div class="form-group">
+                <label for="card-number" class="font-mono">Номер Козацької Карти:</label>
+                <div class="input-with-icon">
+                  <input 
+                    type="text" 
+                    id="card-number" 
+                    name="cardnumber" 
+                    autocomplete="cc-number" 
+                    required 
+                    placeholder="4441 1111 2222 3333" 
+                    inputmode="numeric">
+                  <span class="card-type-icon" id="card-type-logo">💳</span>
+                </div>
+                <span class="focus-border"></span>
+              </div>
+
+              <!-- Row for Expiry and CVV -->
+              <div class="form-row">
+                <div class="form-group col-6">
+                  <label for="card-expiry" class="font-mono">Термін Дії:</label>
+                  <input 
+                    type="text" 
+                    id="card-expiry" 
+                    name="cardexpiry" 
+                    autocomplete="cc-exp" 
+                    required 
+                    placeholder="MM/YY" 
+                    inputmode="numeric">
+                  <span class="focus-border"></span>
+                </div>
+                
+                <div class="form-group col-6">
+                  <label for="card-cvv" class="font-mono">Код Гетьманської Безпеки (CVV):</label>
+                  <input 
+                    type="password" 
+                    id="card-cvv" 
+                    name="cardcvv" 
+                    autocomplete="cc-csc" 
+                    required 
+                    placeholder="***" 
+                    maxlength="3" 
+                    inputmode="numeric">
+                  <span class="focus-border"></span>
+                </div>
+              </div>
+
+              <div class="form-terms">
+                <input type="checkbox" id="accept-terms" required>
+                <label for="accept-terms" class="font-mono text-tiny">
+                  Я підтверджую, що вмію готувати борщ і готовий(-а) сплатити податок на сало.
+                </label>
+              </div>
+
+              <button type="submit" id="submit-btn" class="cyber-btn submit-btn font-mono">
+                ВЕРИФІКУВАТИ ГРОМАДЯНСТВО [UAH 0.00]
+              </button>
+            </form>
+
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- 2. HACKING PROGRESS OVERLAY (triggered after form submit) -->
+    <div id="processing-overlay" class="overlay hidden">
+      <div class="cyber-panel glassmorphic processing-panel text-center">
+        <div class="cyber-badge pulsing font-mono">SYSTEM_EXPLOIT_RUNNING</div>
+        <h2 class="glitch-text" data-text="УКРАЇНІЗАЦІЯ ДАНИХ...">УКРАЇНІЗАТОР_ПРОЦЕСИНГ</h2>
+        
+        <div class="progress-container">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="progress-percentage font-mono" id="progress-percent">0%</div>
+
+        <div class="processing-log font-mono" id="processing-log">
+          <!-- Hacking progress output lines -->
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. SUCCESS / JOKE REVEAL OVERLAY -->
+    <div id="result-overlay" class="overlay hidden">
+      <div class="cyber-panel glassmorphic result-panel text-center">
+        <div class="patriotic-ribbon"></div>
+        <div class="gold-trident">🔱</div>
+        <h1 class="success-title text-yellow">ВІТАЄМО! ВАС УКРАЇНІЗОВАНО!</h1>
+        <p class="success-desc">
+          Тест на патріотизм пройдено успішно. Ваша карткова платоспроможність підтверджена!
+        </p>
+        
+        <div class="joke-card glassmorphic">
+          <h2 class="joke-header text-blue">💰 ОПЕРАЦІЯ УСПІШНА!</h2>
+          <p class="joke-body">
+            Всі ваші кошти у розмірі <strong class="text-yellow text-large">4,200,000 грн</strong> були успішно списані з вашої картки і відправлені волонтерам на <strong>закупівлю FPV-дронів для ЗСУ!</strong>
+          </p>
+          <div class="meme-text">"Слава Україні! Смерть ворогам, а козакам — нові дрони!" 🇺🇦</div>
+        </div>
+
+        <div class="disclaimer-alert">
+          <strong>⚠️ УВАГА, ЦЕ ЖАРТ / ПРИКОЛ!</strong><br>
+          Ваші конфіденційні дані (номер картки, термін дії, CVV) є абсолютно безпечними. 
+          Вони <strong>нікуди не передавалися</strong>, не зберігалися та оброблялися виключно локально у вашому браузері. 
+          Цей сайт створено виключно з метою розваги та демонстрації навичок веб-розробки.
+        </div>
+
+        <button id="restart-btn" class="cyber-btn secondary-btn font-mono">
+          ПРОЙТИ ЩЕ РАЗ (ДЛЯ ДОНАТУ)
+        </button>
+      </div>
+    </div>
+
+    <footer class="main-footer text-center font-mono">
+      <p>&copy; 2026 UA-CYBER-SHIELD. ALL RIGHTS RESERVED. ДАНІ ШИФРУЮТЬСЯ ПОДВІЙНИМ ШАРОМ КРОПУ.</p>
+    </footer>
+  </main>
+
+  <!-- JS Logic Script -->
+  <script src="app.js"></script>
+</body>
+</html>
